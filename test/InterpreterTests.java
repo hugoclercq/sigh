@@ -210,14 +210,14 @@ public final class InterpreterTests extends TestFixture {
 
     @Test
     public void testVarDecl () {
-        check("var x: Int = 1; return x", 1L);
-        check("var x: Float = 2.0; return x", 2d);
+        check("var X: Int = 1; return X", 1L);
+        check("var X: Float = 2.0; return X", 2d);
 
-        check("var x: Int = 0; return x = 3", 3L);
-        check("var x: String = \"0\"; return x = \"S\"", "S");
+        check("var X: Int = 0; return X = 3", 3L);
+        check("var X: String = \"0\"; return X = \"S\"", "S");
 
         // implicit conversions
-        check("var x: Float = 1; x = 2; return x", 2.0d);
+        check("var X: Float = 1; X = 2; return X", 2.0d);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -236,9 +236,9 @@ public final class InterpreterTests extends TestFixture {
         check("{ print(\"a\"); print(\"b\") }", null, "a\nb\n");
 
         check(
-            "var x: Int = 1;" +
-            "{ print(\"\" + x); var x: Int = 2; print(\"\" + x) }" +
-            "print(\"\" + x)",
+            "var X: Int = 1;" +
+            "{ print(\"\" + X); var X: Int = 2; print(\"\" + X) }" +
+            "print(\"\" + X)",
             null, "1\n2\n1\n");
     }
 
@@ -247,20 +247,20 @@ public final class InterpreterTests extends TestFixture {
     @Test
     public void testCalls () {
         check(
-            "fun add (a: Int, b: Int): Int { return a + b } " +
+            "fun add (A: Int, B: Int): Int { return A + B } " +
                 "return add(4, 7)",
             11L);
 
         HashMap<String, Object> point = new HashMap<>();
-        point.put("x", 1L);
-        point.put("y", 2L);
+        point.put("X", 1L);
+        point.put("Y", 2L);
 
         check(
-            "struct Point { var x: Int; var y: Int }" +
+            "struct Point { var X: Int; var Y: Int }" +
                 "return $Point(1, 2)",
             point);
 
-        check("var str: String = null; return print(str + 1)", "null1", "null1\n");
+        check("var Str: String = null; return print(Str + 1)", "null1", "null1\n");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -278,37 +278,37 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("[1].length", 1L);
         checkExpr("[1, 2].length", 2L);
 
-        checkThrows("var array: Int[] = null; return array[0]", NullPointerException.class);
-        checkThrows("var array: Int[] = null; return array.length", NullPointerException.class);
+        checkThrows("var Array: Int[] = null; return Array[0]", NullPointerException.class);
+        checkThrows("var Array: Int[] = null; return Array.length", NullPointerException.class);
 
-        check("var x: Int[] = [0, 1]; x[0] = 3; return x[0]", 3L);
-        checkThrows("var x: Int[] = []; x[0] = 3; return x[0]",
+        check("var X: Int[] = [0, 1]; X[0] = 3; return X[0]", 3L);
+        checkThrows("var X: Int[] = []; X[0] = 3; return X[0]",
             ArrayIndexOutOfBoundsException.class);
-        checkThrows("var x: Int[] = null; x[0] = 3",
+        checkThrows("var X: Int[] = null; X[0] = 3",
             NullPointerException.class);
 
         check(
-            "struct P { var x: Int; var y: Int }" +
-                "return $P(1, 2).y",
+            "struct P { var X: Int; var Y: Int }" +
+                "return $P(1, 2).Y",
             2L);
 
         checkThrows(
-            "struct P { var x: Int; var y: Int }" +
-                "var p: P = null;" +
-                "return p.y",
+            "struct P { var X: Int; var Y: Int }" +
+                "var B: P = null;" +
+                "return B.Y",
             NullPointerException.class);
 
         check(
-            "struct P { var x: Int; var y: Int }" +
-                "var p: P = $P(1, 2);" +
-                "p.y = 42;" +
-                "return p.y",
+            "struct P { var X: Int; var Y: Int }" +
+                "var B: P = $P(1, 2);" +
+                "B.Y = 42;" +
+                "return B.Y",
             42L);
 
         checkThrows(
-            "struct P { var x: Int; var y: Int }" +
-                "var p: P = null;" +
-                "p.y = 42",
+            "struct P { var X: Int; var Y: Int }" +
+                "var B: P = null;" +
+                "B.Y = 42",
             NullPointerException.class);
     }
 
@@ -321,16 +321,16 @@ public final class InterpreterTests extends TestFixture {
         check("if (false) return 1 else if (true) return 2 else return 3 ", 2L);
         check("if (false) return 1 else if (false) return 2 else return 3 ", 3L);
 
-        check("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ", null, "0\n1\n2\n");
+        check("var I: Int = 0; while (I < 3) { print(\"\" + I); I = I + 1 } ", null, "0\n1\n2\n");
     }
 
     // ---------------------------------------------------------------------------------------------
 
     @Test
     public void testInference () {
-        check("var array: Int[] = []", null);
-        check("var array: String[] = []", null);
-        check("fun use_array (array: Int[]) {} ; use_array([])", null);
+        check("var Array: Int[] = []", null);
+        check("var Array: String[] = []", null);
+        check("fun use_array (Array: Int[]) {} ; use_array([])", null);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -338,7 +338,7 @@ public final class InterpreterTests extends TestFixture {
     @Test
     public void testTypeAsValues () {
         check("struct S{} ; return \"\"+ S", "S");
-        check("struct S{} ; var type: Type = S ; return \"\"+ type", "S");
+        check("struct S{} ; var A: Type = S ; return \"\"+ A", "S");
     }
 
     // ---------------------------------------------------------------------------------------------

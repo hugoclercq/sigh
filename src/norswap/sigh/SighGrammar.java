@@ -60,6 +60,19 @@ public class SighGrammar extends Grammar
     public rule _while          = reserved("while");
     public rule _return         = reserved("return");
 
+    // Logic Paradigm
+    public rule QUERY           = word("?-");
+    public rule TURNSTILE       = word(":=");
+
+    public rule _fact           = reserved("fact");
+    public rule _rule           = reserved("rule");
+
+    public rule var_identifier  =
+        identifier(seq(set("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), id_part.at_least(0)))
+        .push($ -> $.str());
+
+    //==========================================================================//
+
     public rule number =
         seq(opt('-'), choice('0', digit.at_least(1)));
 
@@ -228,11 +241,11 @@ public class SighGrammar extends Grammar
         .push($ -> new BlockNode($.span(), $.$[0]));
 
     public rule var_decl =
-        seq(_var, identifier, COLON, type, EQUALS, expression)
+        seq(_var, var_identifier, COLON, type, EQUALS, expression)
         .push($ -> new VarDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule parameter =
-        seq(identifier, COLON, type)
+        seq(var_identifier, COLON, type)
         .push($ -> new ParameterNode($.span(), $.$[0], $.$[1]));
 
     public rule parameters =
