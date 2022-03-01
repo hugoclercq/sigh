@@ -46,6 +46,13 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
 
     // ---------------------------------------------------------------------------------------------
 
+    //Fact test
+    @Test public void factTest() {
+        successInput("fact likes(jhon, marry)");
+    }
+
+
+
     @Test public void testLiteralsAndUnary() {
         successInput("return 42");
         successInput("return 42.0");
@@ -154,18 +161,18 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testVarDecl() {
-        successInput("var x: Int = 1; return x");
-        successInput("var x: Float = 2.0; return x");
+        successInput("var X: Int = 1; return X");
+        successInput("var X: Float = 2.0; return X");
 
-        successInput("var x: Int = 0; return x = 3");
-        successInput("var x: String = \"0\"; return x = \"S\"");
+        successInput("var X: Int = 0; return X = 3");
+        successInput("var X: String = \"0\"; return X = \"S\"");
 
-        failureInputWith("var x: Int = true", "expected Int but got Bool");
-        failureInputWith("return x + 1", "Could not resolve: x");
-        failureInputWith("return x + 1; var x: Int = 2", "Variable used before declaration: x");
+        failureInputWith("var X: Int = true", "expected Int but got Bool");
+        failureInputWith("return X + 1", "Could not resolve: X");
+        failureInputWith("return X + 1; var X: Int = 2", "Variable used before declaration: X");
 
         // implicit conversions
-        successInput("var x: Float = 1 ; x = 2");
+        successInput("var X: Float = 1 ; X = 2");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -182,23 +189,23 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("{ print(\"a\"); print(\"b\") }");
 
         successInput(
-            "var x: Int = 1;" +
-            "{ print(\"\" + x); var x: Int = 2; print(\"\" + x) }" +
-            "print(\"\" + x)");
+            "var X: Int = 1;" +
+            "{ print(\"\" + X); var X: Int = 2; print(\"\" + X) }" +
+            "print(\"\" + X)");
     }
 
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testCalls() {
         successInput(
-            "fun add (a: Int, b: Int): Int { return a + b } " +
+            "fun add (A: Int, B: Int): Int { return A + B } " +
             "return add(4, 7)");
 
         successInput(
-            "struct Point { var x: Int; var y: Int }" +
+            "struct Point { var X: Int; var Y: Int }" +
             "return $Point(1, 2)");
 
-        successInput("var str: String = null; return print(str + 1)");
+        successInput("var Str: String = null; return print(Str + 1)");
 
         failureInputWith("return print(1)", "argument 0: expected String but got Int");
     }
@@ -215,45 +222,45 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         // TODO make this legal?
         // successInput("[].length", 0L);
 
-        successInput("return [1].length");
-        successInput("return [1, 2].length");
+        successInput("return [1].Length");
+        successInput("return [1, 2].Length");
 
-        successInput("var array: Int[] = null; return array[0]");
-        successInput("var array: Int[] = null; return array.length");
+        successInput("var Array: Int[] = null; return Array[0]");
+        successInput("var Array: Int[] = null; return Array.Length");
 
-        successInput("var x: Int[] = [0, 1]; x[0] = 3; return x[0]");
-        successInput("var x: Int[] = []; x[0] = 3; return x[0]");
-        successInput("var x: Int[] = null; x[0] = 3");
-
-        successInput(
-            "struct P { var x: Int; var y: Int }" +
-            "return $P(1, 2).y");
+        successInput("var X: Int[] = [0, 1]; X[0] = 3; return X[0]");
+        successInput("var X: Int[] = []; X[0] = 3; return X[0]");
+        successInput("var X: Int[] = null; X[0] = 3");
 
         successInput(
-            "struct P { var x: Int; var y: Int }" +
-            "var p: P = null;" +
-            "return p.y");
+            "struct P { var X: Int; var Y: Int }" +
+            "return $P(1, 2).Y");
 
         successInput(
-            "struct P { var x: Int; var y: Int }" +
-            "var p: P = $P(1, 2);" +
-            "p.y = 42;" +
-            "return p.y");
+            "struct P { var X: Int; var Y: Int }" +
+            "var X: P = null;" +
+            "return X.Y");
 
         successInput(
-            "struct P { var x: Int; var y: Int }" +
-            "var p: P = null;" +
-            "p.y = 42");
+            "struct P { var X: Int; var Y: Int }" +
+            "var Z: P = $P(1, 2);" + //p
+            "Z.Y = 42;" +
+            "return Z.Y");
+
+        successInput(
+            "struct P { var X: Int; var Y: Int }" +
+            "var X: P = null;" +
+            "X.Y = 42");
 
         failureInputWith(
-            "struct P { var x: Int; var y: Int }" +
+            "struct P { var X: Int; var Y: Int }" +
             "return $P(1, true)",
             "argument 1: expected Int but got Bool");
 
         failureInputWith(
-            "struct P { var x: Int; var y: Int }" +
-            "return $P(1, 2).z",
-            "Trying to access missing field z on struct P");
+            "struct P { var X: Int; var Y: Int }" +
+            "return $P(1, 2).Z",
+            "Trying to access missing field Z on struct P");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -265,7 +272,7 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("if (false) return 1 else if (true) return 2 else return 3 ");
         successInput("if (false) return 1 else if (false) return 2 else return 3 ");
 
-        successInput("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ");
+        successInput("var I: Int = 0; while (I < 3) { print(\"\" + I); I = I + 1 } ");
 
         failureInputWith("if 1 return 1",
             "If statement with a non-boolean condition of type: Int");
@@ -276,16 +283,16 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testInference() {
-        successInput("var array: Int[] = []");
-        successInput("var array: String[] = []");
-        successInput("fun use_array (array: Int[]) {} ; use_array([])");
+        successInput("var Array: Int[] = []");
+        successInput("var Array: String[] = []");
+        successInput("fun use_array (Array: Int[]) {} ; use_array([])");
     }
 
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testTypeAsValues() {
         successInput("struct S{} ; return \"\"+ S");
-        successInput("struct S{} ; var type: Type = S ; return \"\"+ type");
+        successInput("struct S{} ; var X: Type = S ; return \"\"+ X");
     }
 
     // ---------------------------------------------------------------------------------------------

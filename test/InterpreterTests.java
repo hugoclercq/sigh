@@ -265,6 +265,10 @@ public final class InterpreterTests extends TestFixture {
 
     // ---------------------------------------------------------------------------------------------
 
+
+
+
+
     @Test
     public void testArrayStructAccess () {
         checkExpr("[1][0]", 1L);
@@ -274,12 +278,12 @@ public final class InterpreterTests extends TestFixture {
         // TODO check that this fails (& maybe improve so that it generates a better message?)
         // or change to make it legal (introduce a top type, and make it a top type array if thre
         // is no inference context available)
-        // checkExpr("[].length", 0L);
-        checkExpr("[1].length", 1L);
-        checkExpr("[1, 2].length", 2L);
+        //checkExpr("[].Length", 0L);
+        checkExpr("[1].Length", 1L);
+        checkExpr("[1, 2].Length", 2L);
 
         checkThrows("var Array: Int[] = null; return Array[0]", NullPointerException.class);
-        checkThrows("var Array: Int[] = null; return Array.length", NullPointerException.class);
+        checkThrows("var Array: Int[] = null; return Array.Length", NullPointerException.class);
 
         check("var X: Int[] = [0, 1]; X[0] = 3; return X[0]", 3L);
         checkThrows("var X: Int[] = []; X[0] = 3; return X[0]",

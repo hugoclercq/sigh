@@ -332,7 +332,7 @@ public final class SemanticAnalysis
             Type type = r.get(0);
 
             if (type instanceof ArrayType) {
-                if (node.fieldName.equals("length"))
+                if (node.fieldName.equals("Length"))
                     R.rule(node, "type")
                     .by(rr -> rr.set(0, IntType.INSTANCE));
                 else

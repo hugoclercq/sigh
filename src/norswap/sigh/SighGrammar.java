@@ -100,13 +100,32 @@ public class SighGrammar extends Grammar
         .word();
 
     public rule identifier =
-        identifier(seq(choice(alpha, '_'), id_part.at_least(0)))
+        identifier(seq(choice(set("abcdefghijklmnopqrstuvwxyz"), '_'), id_part.at_least(0)))
         .push($ -> $.str());
     
     // ==== SYNTACTIC =========================================================
+    // ------------- Logic Paradigm ------------------------
+
+    public rule atom =
+        identifier(seq(set("abcdefghijklmnopqrstuvwxyz"), id_part.at_least(0)))
+            .push($ -> $.str());
+
+    public rule atoms =
+        this.atom.sep(0, COMMA)
+            .as_list(AtomNode.class);
+
+    public rule paren_atom =
+        seq(LPAREN, this.atoms, RPAREN);
+
+    public rule fact_decl =
+        seq(_fact, identifier, paren_atom)
+            .push($ -> new FactDeclarationNode($.span(), $.$[0], $.$[1]));
+
+
+    // --------- END Logic Paradigm ------------------------
     
     public rule reference =
-        identifier
+        choice(identifier, var_identifier)
         .push($ -> new ReferenceNode($.span(), $.$[0]));
 
     public rule constructor =
@@ -114,7 +133,7 @@ public class SighGrammar extends Grammar
         .push($ -> new ConstructorNode($.span(), $.$[0]));
     
     public rule simple_type =
-        identifier
+        var_identifier
         .push($ -> new SimpleTypeNode($.span(), $.$[0]));
 
     public rule paren_expression = lazy(() ->
@@ -143,7 +162,7 @@ public class SighGrammar extends Grammar
 
     public rule suffix_expression = left_expression()
         .left(basic_expression)
-        .suffix(seq(DOT, identifier),
+        .suffix(seq(DOT, var_identifier),
             $ -> new FieldAccessNode($.span(), $.$[0], $.$[1]))
         .suffix(seq(LSQUARE, lazy(() -> this.expression), RSQUARE),
             $ -> new ArrayAccessNode($.span(), $.$[0], $.$[1]))
@@ -223,6 +242,9 @@ public class SighGrammar extends Grammar
         seq(array_type);
 
     public rule statement = lazy(() -> choice(
+
+        this.fact_decl,
+
         this.block,
         this.var_decl,
         this.fun_decl,
@@ -260,14 +282,14 @@ public class SighGrammar extends Grammar
         .push($ -> new FunDeclarationNode($.span(), $.$[0], $.$[1], $.$[2], $.$[3]));
 
     public rule field_decl =
-        seq(_var, identifier, COLON, type)
+        seq(_var, var_identifier, COLON, type)
         .push($ -> new FieldDeclarationNode($.span(), $.$[0], $.$[1]));
 
     public rule struct_body =
         seq(LBRACE, field_decl.at_least(0).as_list(DeclarationNode.class), RBRACE);
 
     public rule struct_decl =
-        seq(_struct, identifier, struct_body)
+        seq(_struct, var_identifier, struct_body)
         .push($ -> new StructDeclarationNode($.span(), $.$[0], $.$[1]));
 
     public rule if_stmt =
