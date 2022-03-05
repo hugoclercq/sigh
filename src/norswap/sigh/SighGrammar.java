@@ -152,6 +152,7 @@ public class SighGrammar extends Grammar
         constructor,
         reference,
         floating,
+        atom,
         integer,
         string,
         paren_expression,

@@ -46,11 +46,6 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
 
     // ---------------------------------------------------------------------------------------------
 
-    //Fact test
-    @Test public void factTest() {
-        successInput("fact likes(jhon, marry)");
-    }
-
 
 
     @Test public void testLiteralsAndUnary() {

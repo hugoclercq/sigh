@@ -28,6 +28,6 @@ public class FactDeclarationNode extends DeclarationNode{
 
     @Override
     public String contents () {
-        return "fact" + name;
+        return "fact " + name;
     }
 }
