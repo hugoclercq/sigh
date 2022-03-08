@@ -2,24 +2,13 @@ import norswap.autumn.Grammar;
 import norswap.autumn.AutumnTestFixture;
 import norswap.sigh.SighGrammar;
 
-import norswap.sigh.ast.*;
-import norswap.utils.NArrays;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import norswap.utils.data.wrappers.Pair;
 import org.testng.annotations.Test;
-
-import static norswap.sigh.ast.SimpleTypeNode.*;
 
 import static norswap.utils.exceptions.Exceptions.suppress;
 import static norswap.utils.Util.cast;
-import static norswap.utils.Vanilla.list;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class GrammarTests extends AutumnTestFixture {
+public class PersonalGrammarTests extends AutumnTestFixture {
     // ---------------------------------------------------------------------------------------------
 
     private final Object grammar;
@@ -31,14 +20,14 @@ public class GrammarTests extends AutumnTestFixture {
      * Use this constructor in subclasses to test alternative Java grammars that use the same rule
      * names as the original.
      */
-    public GrammarTests (Object grammar) {
+    public PersonalGrammarTests (Object grammar) {
         this.grammar = grammar;
         this.grammarClass = grammar.getClass();
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public GrammarTests () {
+    public PersonalGrammarTests () {
         this(new SighGrammar());
     }
 
