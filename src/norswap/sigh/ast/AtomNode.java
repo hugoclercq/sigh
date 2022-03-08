@@ -3,7 +3,7 @@ package norswap.sigh.ast;
 import norswap.autumn.positions.Span;
 import norswap.utils.Util;
 
-public class AtomNode extends DeclarationNode{
+public class AtomNode extends ExpressionNode{
 
     public final String name;
 
@@ -12,18 +12,14 @@ public class AtomNode extends DeclarationNode{
         this.name = name;
     }
 
-    @Override
     public String name () {
         return name;
     }
 
     @Override
-    public String declaredThing () {
-        return "atom";
-    }
-
-    @Override
     public String contents () {
+
+        System.out.println("slt");
         return name;
     }
 }

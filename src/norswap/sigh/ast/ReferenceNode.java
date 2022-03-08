@@ -13,6 +13,8 @@ public final class ReferenceNode extends ExpressionNode
     }
 
     @Override public String contents() {
+
+        System.out.println(";(");
         return name;
     }
 }

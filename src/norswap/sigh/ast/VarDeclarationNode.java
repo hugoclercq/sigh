@@ -21,6 +21,9 @@ public final class VarDeclarationNode extends DeclarationNode
     }
 
     @Override public String contents () {
+        System.out.println(name);
+        System.out.println(type);
+        System.out.println(initializer.contents());
         return "var " + name;
     }
 

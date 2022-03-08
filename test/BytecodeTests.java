@@ -218,14 +218,14 @@ public class BytecodeTests
         checkExpr("[\"a\", \"b\", \"c\"][0]", "a");
         checkExpr("[\"a\", \"b\", \"c\"][2]", "c");
 
-        check("var x: Float[] = [1.0, 2.0]; x[0] = 3.0; print(\"\" + x[0])", "3.0");
-        check("var x: Float[] = [1.0, 2.0]; x[0] = 3; print(\"\" + x[0])", "3.0");
+        check("var X: Float[] = [1.0, 2.0]; X[0] = 3.0; print(\"\" + X[0])", "3.0");
+        check("var X: Float[] = [1.0, 2.0]; X[0] = 3; print(\"\" + X[0])", "3.0");
     }
 
     private final String printa = "print(\"a\")";
     private final String printb = "print(\"b\")";
-    private final String printx = "print(\"\" + (x))";
-    private final String printy = "print(\"\" + (y))";
+    private final String printx = "print(\"\" + (X))";
+    private final String printy = "print(\"\" + (Y))";
 
     @Test public void testVariables() {
         check("var x: Int = 1;" + printx, "1");
@@ -248,19 +248,19 @@ public class BytecodeTests
         check("if 1 == 1 " + printa + "else " + printb, "a");
         check("if 1 == 0 " + printa + "else " + printb, "b");
 
-        check("var x: Int = 1 ; while x == 3 { " + printx + "}", "");
-        check("var x: Int = 1 ; while x <= 3 { " + printx + " ; x = x + 1 }", "1\n2\n3");
+        check("var X: Int = 1 ; while X == 3 { " + printx + "}", "");
+        check("var X: Int = 1 ; while X <= 3 { " + printx + " ; X = X + 1 }", "1\n2\n3");
     }
 
     @Test public void testMethod() {
-        check("fun test (x: String):String { return x } print(test(\"a\"))", "a");
-        check("fun test (x: String) { print(x) } ; test(\"a\")", "a");
+        check("fun test (X: String):String { return X } print(test(\"a\"))", "a");
+        check("fun test (X: String) { print(X) } ; test(\"a\")", "a");
         check("fun test () { fun foo() { print(\"a\") } foo() foo() } test()", "a\na");
     }
 
     private final String makePair =
-        "struct Pair { var x: Int ; var y: Float }" +
-        "var x: Pair = $Pair(1, 2.0) ;";
+        "struct Pair { var X: Int ; var Y: Float }" +
+        "var X: Pair = $Pair(1, 2.0) ;";
 
     @Test public void testStructs() {
         check(makePair + "print(\"\" + x.x + \":\" + x.y)", "1:2.0");

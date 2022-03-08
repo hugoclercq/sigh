@@ -108,11 +108,13 @@ public class SighGrammar extends Grammar
 
     public rule atom =
         identifier(seq(set("abcdefghijklmnopqrstuvwxyz"), id_part.at_least(0)))
-            .push($ -> $.str());
+            .push($ -> new AtomNode($.span(), $.str()));
 
-    public rule atoms =
+    public rule atoms = lazy(() ->
         this.atom.sep(0, COMMA)
-            .as_list(AtomNode.class);
+            .as_list(AtomNode.class)
+        );
+
 
     public rule paren_atom =
         seq(LPAREN, this.atoms, RPAREN);
