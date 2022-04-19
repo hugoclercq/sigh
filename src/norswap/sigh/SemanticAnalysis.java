@@ -146,10 +146,38 @@ public final class SemanticAnalysis
         walker.register(WhileNode.class,                PRE_VISIT,  analysis::whileStmt);
         walker.register(ReturnNode.class,               PRE_VISIT,  analysis::returnStmt);
 
+        //probably something to check such as "fact likes(marry, X) => X must be Atom type
+        //but we need to add it to our grammar first
+        walker.register(FactDeclarationNode.class,      PRE_VISIT,   analysis::factDeclaration);
+        walker.register(AtomNode.class,                 PRE_VISIT,   analysis::atomLiteral);
+
+
+
+
         walker.registerFallback(POST_VISIT, node -> {});
 
         return walker;
     }
+
+    private void factDeclaration (FactDeclarationNode node){
+        R.rule()
+            .using()
+            .by(rule ->{
+                for(int i=0; i<node.atoms.toArray().length; i++){
+                    if(!(node.atoms.get(i) instanceof AtomNode)){
+                        rule.errorFor(node.atoms.get(i).name + " is not of type Atom", node, node.attr("type"));
+                    }
+                }
+            });
+    }
+
+
+    private void atomLiteral (AtomNode node) {
+        R.set(node, "type", AtomType.INSTANCE);
+    }
+
+
+
 
     // endregion
     // =============================================================================================

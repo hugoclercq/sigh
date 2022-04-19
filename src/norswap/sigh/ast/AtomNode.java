@@ -18,8 +18,6 @@ public class AtomNode extends ExpressionNode{
 
     @Override
     public String contents () {
-
-        System.out.println("slt");
         return name;
     }
 }

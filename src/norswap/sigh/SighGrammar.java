@@ -100,14 +100,14 @@ public class SighGrammar extends Grammar
         .word();
 
     public rule identifier =
-        identifier(seq(choice(set("abcdefghijklmnopqrstuvwxyz"), '_'), id_part.at_least(0)))
+        identifier(seq(set("abcdefghijklmnopqrstuvwxyz"), id_part.at_least(0)))
         .push($ -> $.str());
     
     // ==== SYNTACTIC =========================================================
     // ------------- Logic Paradigm ------------------------
 
     public rule atom =
-        identifier(seq(set("abcdefghijklmnopqrstuvwxyz"), id_part.at_least(0)))
+        identifier(seq("_", id_part.at_least(0)))
             .push($ -> new AtomNode($.span(), $.str()));
 
     public rule atoms = lazy(() ->
@@ -122,6 +122,10 @@ public class SighGrammar extends Grammar
     public rule fact_decl =
         seq(_fact, identifier, paren_atom)
             .push($ -> new FactDeclarationNode($.span(), $.$[0], $.$[1]));
+
+    public rule rule_decl =
+        seq(_rule, identifier, paren_atom, TURNSTILE, identifier, paren_atom)
+            .push($ -> new RuleDeclarationNode($.span(), $.$[0], $.$[1], $.$[2], $.$[3]));
 
 
     // --------- END Logic Paradigm ------------------------

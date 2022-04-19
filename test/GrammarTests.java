@@ -25,10 +25,42 @@ public class GrammarTests extends AutumnTestFixture {
     // ---------------------------------------------------------------------------------------------
 
     @Test
+    public void atom_decl () {
+        rule = grammar.statement;
+
+        successExpect("var X: Atom = _jean", new VarDeclarationNode(null,
+            "X", new SimpleTypeNode(null, "Atom"), new AtomNode(null, "_jean")));
+
+        successExpect("var X: Atom = failure(Smtg)", new VarDeclarationNode(null,
+            "X", new SimpleTypeNode(null, "Atom"), new FunCallNode(null, new ReferenceNode(null,"failure"), asList(new ReferenceNode(null, "Smtg")))));
+
+        successExpect("var X: Atom = Jean", new VarDeclarationNode(null,
+            "X", new SimpleTypeNode(null, "Atom"), new ReferenceNode(null, "Jean")));
+
+        failure("var x: Atom = _jean");
+    }
+
+    @Test
     public void fact_decl () {
         rule = grammar.fact_decl;
 
-        successExpect("fact likes(john, marry)", new FactDeclarationNode(null, "likes", asList(new AtomNode(null, "john"), new AtomNode(null, "marry"))));
+        successExpect("fact likes(_john, _marry)", new FactDeclarationNode(null, "likes", asList(new AtomNode(null, "_john"), new AtomNode(null, "_marry"))));
+        successExpect("fact human(_jean)", new FactDeclarationNode(null, "human", asList(new AtomNode(null, "_jean"))));
+        successExpect("fact test()", new FactDeclarationNode(null, "test", asList()));
+
+        failure("fact Test(_john, _marry)");
+        failure("Fact test(_john, _marry)");
+
+        //failure as of now but should be success at some point later
+        failure("fact likes(_john, Who)");
+    }
+
+    @Test
+    public void rule_decl () {
+        rule = grammar.rule_decl;
+
+        successExpect("rule sibling(_x, _y) := sibling(_y, _x)", new RuleDeclarationNode(null, "sibling", asList(new AtomNode(null, "_x"), new AtomNode(null, "_y")), "sibling", asList(new AtomNode(null, "_y"), new AtomNode(null, "_x"))));
+        /*
         successExpect("fact human(jean)", new FactDeclarationNode(null, "human", asList(new AtomNode(null, "jean"))));
         successExpect("fact test()", new FactDeclarationNode(null, "test", asList()));
 
@@ -39,6 +71,7 @@ public class GrammarTests extends AutumnTestFixture {
         failure("fact likes(john, Who)");
         failure("fact likes(john, Who[1])");
         failure("fact likes(john, var Who:Atom");
+        */
     }
 
 
@@ -110,10 +143,6 @@ public class GrammarTests extends AutumnTestFixture {
     @Test public void testDeclarations() {
         rule = grammar.statement;
 
-/*
-        successExpect("var X: Atom = jean", new VarDeclarationNode(null,
-            "X", new SimpleTypeNode(null, "Atom"), new AtomNode(null, "jean")));
-*/
         successExpect("var X: Int = 1", new VarDeclarationNode(null,
             "X", new SimpleTypeNode(null, "Int"), intlit(1)));
 

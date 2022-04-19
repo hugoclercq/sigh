@@ -192,17 +192,17 @@ public class BytecodeTests
 
     @Test
     public void testVarDecl () {
-        check("var x: Int = 1; print(\"\" + x)", "1");
-        check("var x: Float = 2.0; print(\"\" + x)", "2.0");
+        check("var X: Int = 1; print(\"\" + X)", "1");
+        check("var X: Float = 2.0; print(\"\" + X)", "2.0");
 
-        check("var x: Int = 0; x = 3; print(\"\" + x)", "3");
+        check("var X: Int = 0; X = 3; print(\"\" + X)", "3");
 
         // TODO fails
         //check("var x: String = \"0\"; print(x = \"S\")", "S");
-        check("var x: String = \"0\"; x = \"S\"; print(x)", "S");
+        check("var X: String = \"0\"; X = \"S\"; print(X)", "S");
 
         // implicit conversions
-        check("var x: Float = 1; x = 2; print(\"\" + x)", "2.0");
+        check("var X: Float = 1; X = 2; print(\"\" + X)", "2.0");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -228,19 +228,19 @@ public class BytecodeTests
     private final String printy = "print(\"\" + (Y))";
 
     @Test public void testVariables() {
-        check("var x: Int = 1;" + printx, "1");
-        check("var x: String = \"a\";" + printx, "a");
-        check("var x: Int = 1 ; " + printx + " ; x = 2 ; " + printx, "1\n2");
+        check("var X: Int = 1;" + printx, "1");
+        check("var X: String = \"a\";" + printx, "a");
+        check("var X: Int = 1 ; " + printx + " ; X = 2 ; " + printx, "1\n2");
 
         // longs and double have double width
-        check("var x: Int = 1 ; var y: Float = 2.0 ;" + printx + printy, "1\n2.0");
-        check("var x: Int = 1 ; var y: String = \"a\" ;" + printx + printy, "1\na");
-        check("var x: String = \"a\" ; var y: Int = 1 ;" + printx + printy, "a\n1");
-        check("var x: Float = 1.0 ; var y: String = \"a\" ;" + printx + printy, "1.0\na");
+        check("var X: Int = 1 ; var Y: Float = 2.0 ;" + printx + printy, "1\n2.0");
+        check("var X: Int = 1 ; var Y: String = \"a\" ;" + printx + printy, "1\na");
+        check("var X: String = \"a\" ; var Y: Int = 1 ;" + printx + printy, "a\n1");
+        check("var X: Float = 1.0 ; var Y: String = \"a\" ;" + printx + printy, "1.0\na");
 
         // implicit conversion
-        check("var x: Float = 1 ;" + printx, "1.0");
-        check("var x: Float = 1 ;" + printx + "x = 2 ;" + printx, "1.0\n2.0");
+        check("var X: Float = 1 ;" + printx, "1.0");
+        check("var X: Float = 1 ;" + printx + "X = 2 ;" + printx, "1.0\n2.0");
     }
 
     @Test public void testIfWhile() {
@@ -263,8 +263,8 @@ public class BytecodeTests
         "var X: Pair = $Pair(1, 2.0) ;";
 
     @Test public void testStructs() {
-        check(makePair + "print(\"\" + x.x + \":\" + x.y)", "1:2.0");
-        check(makePair + "x.x = 3; print(\"\" + x.x)", "3");
-        check(makePair + "x.y = 3; print(\"\" + x.y)", "3.0");
+        check(makePair + "print(\"\" + X.X + \":\" + X.Y)", "1:2.0");
+        check(makePair + "X.X = 3; print(\"\" + X.X)", "3");
+        check(makePair + "X.Y = 3; print(\"\" + X.Y)", "3.0");
     }
 }
