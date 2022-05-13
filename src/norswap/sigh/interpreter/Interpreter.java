@@ -5,6 +5,7 @@ import norswap.sigh.scopes.DeclarationKind;
 import norswap.sigh.scopes.RootScope;
 import norswap.sigh.scopes.Scope;
 import norswap.sigh.scopes.SyntheticDeclarationNode;
+import norswap.sigh.types.AtomType;
 import norswap.sigh.types.FloatType;
 import norswap.sigh.types.IntType;
 import norswap.sigh.types.StringType;
@@ -75,6 +76,8 @@ public final class Interpreter
         visitor.register(BinaryExpressionNode.class,     this::binaryExpression);
         visitor.register(AssignmentNode.class,           this::assignment);
 
+        visitor.register(AtomNode.class,                 this::AtomLiteral);
+
         // statement groups & declarations
         visitor.register(RootNode.class,                 this::root);
         visitor.register(BlockNode.class,                this::block);
@@ -131,6 +134,9 @@ public final class Interpreter
     }
 
     // ---------------------------------------------------------------------------------------------
+    private String AtomLiteral (AtomNode node) {
+        return node.name;
+    }
 
     private Long intLiteral (IntLiteralNode node) {
         return node.value;
@@ -452,6 +458,8 @@ public final class Interpreter
             return ((StructDeclarationNode) arg).name;
         else if (arg instanceof Constructor)
             return "$" + ((Constructor) arg).declaration.name;
+        else if (arg instanceof AtomType)
+            return ((AtomType) arg).name();
         else
             return arg.toString();
     }
