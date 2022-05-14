@@ -17,3 +17,5 @@ fun main (Args: String) {
 
 var A : Atom = _jhon
 print("" + A)
+
+fact human(_jean)

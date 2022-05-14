@@ -109,6 +109,14 @@ public final class InterpreterTests extends TestFixture {
     // ---------------------------------------------------------------------------------------------
 
     @Test
+    public void testAtom () {
+        checkExpr("_jhon", "_jhon");
+        check("return _jhon", "_jhon");
+
+        check("var X : Atom = _jhon; return X", "_jhon");
+    }
+
+    @Test
     public void testLiteralsAndUnary () {
         checkExpr("42", 42L);
         checkExpr("42.0", 42.0d);

@@ -1,5 +1,6 @@
 package norswap.sigh.bytecode;
 
+import norswap.sigh.ast.AtomNode;
 import norswap.sigh.types.*;
 import java.lang.reflect.Array;
 
@@ -50,6 +51,8 @@ public final class TypeUtils {
             throw new UnsupportedOperationException(); // TODO
         else if (type instanceof StructType)
             return Object.class; // the proper class type is not available at compile time
+        else if (type instanceof AtomType)
+            return String.class;
         else
             throw new Error("unreachable");
     }
@@ -104,6 +107,8 @@ public final class TypeUtils {
             return "D"; // double
         else if (type instanceof VoidType)
             return "V"; // void
+        else if (type instanceof AtomType)
+            return "Ljava/lang/String;";
         else if (type instanceof StringType)
             return "Ljava/lang/String;";
         else if (type instanceof NullType)

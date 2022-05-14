@@ -99,6 +99,7 @@ public class BytecodeCompiler
         visitor.register(UnaryExpressionNode.class,      this::unaryExpression);
         visitor.register(BinaryExpressionNode.class,     this::binaryExpression);
         visitor.register(AssignmentNode.class,           this::assignment);
+        visitor.register(AtomNode.class,                 this::AtomLiteral);
 
         // statement groups & declarations
         visitor.register(RootNode.class,                 this::root);
@@ -239,6 +240,11 @@ public class BytecodeCompiler
     }
 
     // ---------------------------------------------------------------------------------------------
+
+    private Object AtomLiteral (AtomNode node) {
+        method.visitLdcInsn(node.name);
+        return null;
+    }
 
     private Object intLiteral (IntLiteralNode node) {
         method.visitLdcInsn(node.value);
@@ -432,7 +438,10 @@ public class BytecodeCompiler
         } else if (type instanceof StructType) {
             // String.valueOf -> Object#toString (or override)
             invokeStatic(method, String.class, "valueOf", Object.class);
-        } else {
+        } else if (type instanceof AtomType) {
+            invokeStatic(method, String.class, "valueOf", Object.class);
+        }
+        else {
             throw new Error("unexpected type: " + type);
         }
     }
@@ -720,6 +729,9 @@ public class BytecodeCompiler
                     break;
                 case "Type":
                     method.visitLdcInsn(org.objectweb.asm.Type.getType(Class.class));
+                    break;
+                case "Atom":
+                    method.visitLdcInsn(org.objectweb.asm.Type.getType(String.class));
                     break;
                 case "print":
                     // TODO cf FunDeclarationNode case above

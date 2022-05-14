@@ -79,6 +79,15 @@ public class BytecodeTests
     // ---------------------------------------------------------------------------------------------
 
     @Test
+    public void AtomTest() {
+        checkExpr("_jhon", "_jhon");
+
+        //check("print(_jhon)", "_jhon");
+
+        check("var X: Atom = _jhon; print(\"\" + X)", "_jhon");
+    }
+
+    @Test
     public void basicPrintTest() {
         // explicit unroll basic tests that involve print
         check("print(\"hello\")", "hello");
