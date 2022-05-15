@@ -1,3 +1,4 @@
+/*
 fun main (Args: String) {
     var Num: Int = 42
     var I: Int = 1
@@ -13,10 +14,16 @@ fun main (Args: String) {
         I = I + 1
     }
 }
-
+main("")
+*/
 
 var A : Atom = _jhon
 print("" + A)
 
 fact human(_jean)
 var B : Atom = _mary
+
+rule sibling(X: Atom, Y: Atom) := sibling(Y, X)
+
+rule father(X: Atom, Y: Atom) := parent(X,Y), man(X)
+

@@ -58,23 +58,22 @@ public class GrammarTests extends AutumnTestFixture {
     @Test
     public void rule_decl () {
         rule = grammar.rule_decl;
+        successExpect("rule sibling(X: Atom, Y: Atom) := sibling(Y, X)", new RuleDeclarationNode(null, "sibling", asList(new ParameterNode(null, "X", new SimpleTypeNode(null, "Atom")), new ParameterNode(null, "Y", new SimpleTypeNode(null, "Atom"))), asList(new FactNode(null, "sibling", asList(new ReferenceNode(null, "Y"), new ReferenceNode(null, "X"))))));
 
-        successExpect("rule sibling(_x, _y) := sibling(_y, _x)", new RuleDeclarationNode(null, "sibling", asList(new AtomNode(null, "_x"), new AtomNode(null, "_y")), "sibling", asList(new AtomNode(null, "_y"), new AtomNode(null, "_x"))));
-        /*
-        // rule sibling(X,Y) := sibling(Y,X)
-        // rule father(X,Y) := parent(X,Y), man(X)
-        // rule father(X: Atom, Y: Atom) := parent(X,Y), man(X)
-        successExpect("fact human(jean)", new FactDeclarationNode(null, "human", asList(new AtomNode(null, "jean"))));
-        successExpect("fact test()", new FactDeclarationNode(null, "test", asList()));
+        successExpect("rule human(X: Atom) := likes(X, _food)", new RuleDeclarationNode(null, "human", asList(new ParameterNode(null, "X", new SimpleTypeNode(null, "Atom"))), asList(new FactNode(null, "likes", asList(new ReferenceNode(null, "X"), new AtomNode(null, "_food"))))));
 
-        failure("fact Test(john, marry)");
-        failure("Fact test(john, marry)");
+        successExpect("rule father(X: Atom, Y: Atom) := parent(X,Y), man(X)", new RuleDeclarationNode(null,
+                                                                                                        "father" ,
+                                                                                                            asList(new ParameterNode(null,"X", new SimpleTypeNode(null, "Atom")), new ParameterNode(null, "Y", new SimpleTypeNode(null, "Atom"))),
+                                                                                                                asList(new FactNode(null, "parent", asList(new ReferenceNode(null, "X"), new ReferenceNode(null, "Y"))), new FactNode(null, "man", asList(new ReferenceNode(null, "X"))))));
 
-        //failure as of now but should be success at some point later
-        failure("fact likes(john, Who)");
-        failure("fact likes(john, Who[1])");
-        failure("fact likes(john, var Who:Atom");
-        */
+        failure("Rule father(X: Atom, Y: Atom) := parent(X,Y), man(X)");
+        failure("rule Father(X: Atom, Y: Atom) := parent(X,Y), man(X)");
+        failure("rule father(X, Y) := parent(X,Y), man(X)");
+        failure("rule father(X: Atom, Y: Atom) := Parent(X,Y), man(X)");
+        failure("rule father(X: Atom, Y: Atom) = parent(X,Y), man(X)");
+        failure("rule father(X: Atom, Y: Atom) := X, Y");
+        failure("rule father(_x, _y) := parent(_x,_y), man(_x)");
     }
 
 

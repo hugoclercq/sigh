@@ -7,16 +7,14 @@ import java.util.List;
 public class RuleDeclarationNode extends DeclarationNode{
 
     public final String name;
-    public final List<AtomNode> atoms;
-    public final String name2;
-    public final List<AtomNode> atoms2;
+    public final List<ParameterNode> atoms;
+    public final List<FactNode> facts;
 
-    public RuleDeclarationNode (Span span, Object name, Object atoms, Object name2, Object atoms2) {
+    public RuleDeclarationNode (Span span, Object name, Object atoms, Object facts) {
         super(span);
         this.name = Util.cast(name, String.class);
         this.atoms = Util.cast(atoms, List.class);
-        this.name2 = Util.cast(name2, String.class);
-        this.atoms2 = Util.cast(atoms2, List.class);
+        this.facts = Util.cast(facts, List.class);
     }
 
 
@@ -32,7 +30,7 @@ public class RuleDeclarationNode extends DeclarationNode{
 
     @Override
     public String contents () {
-        return "rule " + name;
+        return "rule " + name ;
     }
 
 }

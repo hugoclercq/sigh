@@ -151,6 +151,9 @@ public final class SemanticAnalysis
         walker.register(FactDeclarationNode.class,      PRE_VISIT,   analysis::factDeclaration);
         walker.register(AtomNode.class,                 PRE_VISIT,   analysis::atomLiteral);
 
+        walker.register(RuleDeclarationNode.class,      PRE_VISIT,   analysis::ruleDecl);
+        walker.register(RuleDeclarationNode.class,      POST_VISIT, analysis::popScope);
+        walker.register(FactNode.class,                 PRE_VISIT,   analysis::fact);
 
 
 
@@ -162,7 +165,7 @@ public final class SemanticAnalysis
     private void factDeclaration (FactDeclarationNode node){
         scope.declare(node.name + node.declaredThing(), node);
         R.set(node, "scope", scope);
-        
+
         R.rule()
             .using()
             .by(rule ->{
@@ -178,6 +181,33 @@ public final class SemanticAnalysis
 
     private void atomLiteral (AtomNode node) {
         R.set(node, "type", AtomType.INSTANCE);
+    }
+
+    private void ruleDecl (RuleDeclarationNode node){
+        scope.declare(node.name, node);
+        scope = new Scope(node, scope);
+        R.set(node, "scope", scope);
+
+
+        Attribute[] dependencies = new Attribute[node.atoms.size()];
+        forEachIndexed(node.atoms, (i, atom) ->
+            dependencies[i] = atom.attr("type"));
+
+        R.rule()
+            .using(dependencies)
+            .by (r -> {
+                for (int i = 0; i < dependencies.length; ++i){
+
+                    if (!(r.get(i) instanceof AtomType)) {
+                        r.error("Rule decl statement with a non atom type: " + r.get(i), node);
+                    }
+                }
+            });
+
+    }
+
+    private void fact(FactNode node){
+
     }
 
 

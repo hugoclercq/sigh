@@ -123,9 +123,7 @@ public class SighGrammar extends Grammar
         seq(_fact, identifier, paren_atom)
             .push($ -> new FactDeclarationNode($.span(), $.$[0], $.$[1]));
 
-    public rule rule_decl =
-        seq(_rule, identifier, paren_atom, TURNSTILE, identifier, paren_atom)
-            .push($ -> new RuleDeclarationNode($.span(), $.$[0], $.$[1], $.$[2], $.$[3]));
+
 
 
     // --------- END Logic Paradigm ------------------------
@@ -251,6 +249,7 @@ public class SighGrammar extends Grammar
     public rule statement = lazy(() -> choice(
 
         this.fact_decl,
+        this.rule_decl,
 
         this.block,
         this.var_decl,
@@ -280,6 +279,24 @@ public class SighGrammar extends Grammar
     public rule parameters =
         parameter.sep(0, COMMA)
         .as_list(ParameterNode.class);
+
+
+    public rule fact =
+        seq(identifier, function_args)
+            .push($ -> new FactNode($.span(), $.$[0], $.$[1]));
+
+
+    public rule facts = lazy(() ->
+        this.fact.sep(0,COMMA)
+            .as_list(FactNode.class)
+    );
+
+    public rule rule_decl =
+        seq(_rule, identifier, LPAREN, parameters, RPAREN, TURNSTILE, facts)
+            .push($ -> new RuleDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+
+
 
     public rule maybe_return_type =
         seq(COLON, type).or_push_null();

@@ -57,6 +57,14 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("print(\"\" + _jhon)");
     }
 
+    @Test public void testRule() {
+        successInput("rule sibling(X: Atom, Y: Atom) := sibling(Y, X);");
+        successInput("rule father(X: Atom, Y: Atom) := parent(X,Y), man(X);");
+
+        successInput("rule human(X: Atom) := likes(X, _food)");
+        failureInputWith("rule father(X: String, Y: Atom) := parent(X,Y), man(X);", "Rule decl statement with a non atom type: String");
+    }
+
 
     @Test public void testLiteralsAndUnary() {
         successInput("return 42");
