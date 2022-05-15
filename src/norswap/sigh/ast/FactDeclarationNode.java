@@ -23,7 +23,11 @@ public class FactDeclarationNode extends DeclarationNode{
 
     @Override
     public String declaredThing () {
-        return "fact";
+        String[] tmp = new String[atoms.size()];
+        for(int i = 0; i<tmp.length; i++){
+            tmp[i] = atoms.get(i).name;
+        }
+        return "(" + String.join(", ", tmp) + ")";
     }
 
     @Override

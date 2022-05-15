@@ -61,6 +61,9 @@ public class GrammarTests extends AutumnTestFixture {
 
         successExpect("rule sibling(_x, _y) := sibling(_y, _x)", new RuleDeclarationNode(null, "sibling", asList(new AtomNode(null, "_x"), new AtomNode(null, "_y")), "sibling", asList(new AtomNode(null, "_y"), new AtomNode(null, "_x"))));
         /*
+        // rule sibling(X,Y) := sibling(Y,X)
+        // rule father(X,Y) := parent(X,Y), man(X)
+        // rule father(X: Atom, Y: Atom) := parent(X,Y), man(X)
         successExpect("fact human(jean)", new FactDeclarationNode(null, "human", asList(new AtomNode(null, "jean"))));
         successExpect("fact test()", new FactDeclarationNode(null, "test", asList()));
 

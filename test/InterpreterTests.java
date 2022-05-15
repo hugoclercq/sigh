@@ -114,6 +114,14 @@ public final class InterpreterTests extends TestFixture {
         check("return _jhon", "_jhon");
 
         check("var X : Atom = _jhon; return X", "_jhon");
+        check("var X : Atom = _jhon; print(\"\" + X);", null, "_jhon\n");
+    }
+
+    @Test
+    public void testFact () {
+        rule = grammar.root;
+        check("fact human(_jhon);",null, null);
+        check("fact like(_mary, _food);",null, null);
     }
 
     @Test

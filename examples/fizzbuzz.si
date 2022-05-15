@@ -19,3 +19,4 @@ var A : Atom = _jhon
 print("" + A)
 
 fact human(_jean)
+var B : Atom = _mary

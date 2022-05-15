@@ -51,6 +51,12 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("fact test()");
     }
 
+    @Test public void testAtom() {
+        successInput("var X : Atom = _jhon");
+        successInput("return _jhon");
+        successInput("print(\"\" + _jhon)");
+    }
+
 
     @Test public void testLiteralsAndUnary() {
         successInput("return 42");

@@ -110,6 +110,9 @@ public class BytecodeCompiler
         visitor.register(FunDeclarationNode.class,       this::funDecl);
         visitor.register(StructDeclarationNode.class,    this::structDecl);
 
+        // add fact
+        //visitor.register(FactDeclarationNode.class,       this::factDecl);
+
         // statements
         visitor.register(ExpressionStatementNode.class,  this::expressionStmt);
         visitor.register(IfNode.class,                   this::ifStmt);

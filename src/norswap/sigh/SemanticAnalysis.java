@@ -160,6 +160,9 @@ public final class SemanticAnalysis
     }
 
     private void factDeclaration (FactDeclarationNode node){
+        scope.declare(node.name + node.declaredThing(), node);
+        R.set(node, "scope", scope);
+        
         R.rule()
             .using()
             .by(rule ->{
@@ -169,6 +172,7 @@ public final class SemanticAnalysis
                     }
                 }
             });
+
     }
 
 
