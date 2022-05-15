@@ -119,9 +119,7 @@ public class SighGrammar extends Grammar
     public rule paren_atom =
         seq(LPAREN, this.atoms, RPAREN);
 
-    public rule fact_decl =
-        seq(_fact, identifier, paren_atom)
-            .push($ -> new FactDeclarationNode($.span(), $.$[0], $.$[1]));
+
 
 
 
@@ -295,6 +293,9 @@ public class SighGrammar extends Grammar
         seq(_rule, identifier, LPAREN, parameters, RPAREN, TURNSTILE, facts)
             .push($ -> new RuleDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
 
+    public rule fact_decl =
+        seq(_fact, identifier, function_args)
+            .push($ -> new FactDeclarationNode($.span(), $.$[0], $.$[1]));
 
 
 

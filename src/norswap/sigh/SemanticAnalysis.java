@@ -166,16 +166,32 @@ public final class SemanticAnalysis
         scope.declare(node.name + node.declaredThing(), node);
         R.set(node, "scope", scope);
 
+        Attribute[] dependencies = new Attribute[node.atoms.size()];
+        forEachIndexed(node.atoms, (i, atom) ->
+            dependencies[i] = atom.attr("type"));
+
+        R.rule()
+            .using(dependencies)
+            .by (r -> {
+                for (int i = 0; i < dependencies.length; ++i){
+
+                    if (!(r.get(i) instanceof AtomType)) {
+                        r.error("Fact decl statement with a non atom type: " + r.get(i), node);
+                    }
+                }
+            });
+
+        /*
         R.rule()
             .using()
             .by(rule ->{
                 for(int i=0; i<node.atoms.toArray().length; i++){
                     if(!(node.atoms.get(i) instanceof AtomNode)){
-                        rule.errorFor(node.atoms.get(i).name + " is not of type Atom", node, node.attr("type"));
+                        rule.errorFor(node.atoms.get(i) + " is not of type Atom", node, node.attr("type"));
                     }
                 }
             });
-
+        */
     }
 
 

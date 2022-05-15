@@ -48,11 +48,11 @@ public class GrammarTests extends AutumnTestFixture {
         successExpect("fact human(_jean)", new FactDeclarationNode(null, "human", asList(new AtomNode(null, "_jean"))));
         successExpect("fact test()", new FactDeclarationNode(null, "test", asList()));
 
+        successExpect("fact test(Jean)", new FactDeclarationNode(null, "test", asList(new ReferenceNode(null, "Jean"))));
+
         failure("fact Test(_john, _marry)");
         failure("Fact test(_john, _marry)");
 
-        //failure as of now but should be success at some point later
-        failure("fact likes(_john, Who)");
     }
 
     @Test
