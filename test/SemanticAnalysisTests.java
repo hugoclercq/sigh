@@ -50,6 +50,7 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("fact human(_jean)");
         successInput("fact test()");
         successInput("var Jean: Atom = _jean; fact test(Jean)");
+        successInput("var Jean: Atom = _jean; fact test(Jean, _mary)");
 
         failureInputWith("var Jean: String = \"jean\"; fact test(Jean)", "Fact decl statement with a non atom type: String");
     }
